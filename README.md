@@ -1,4 +1,13 @@
-chef-rbenv-virtualenv
-=====================
+# rbenv_virtualenv cookbook
 
-Prev
+# Requirements
+
+# Usage
+
+# Attributes
+
+# Recipes
+
+# Author
+
+Author:: YOUR_NAME (<YOUR_EMAIL>)
