@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  config.vm.hostname = "rbenv_virtualenv-env-berkshelf"
+  config.vm.hostname = "rbenv-virtualenv-berkshelf"
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu-12.04.3-x64"
@@ -89,15 +89,15 @@ Vagrant.configure("2") do |config|
     }
 
     chef.run_list = [
-       'rbenv_virtualenv::default',
-       'apt::default',
-       'git',
-       'rbenv::default',
-       'rbenv::ruby_build',
-       'rbenv::rbenv_vars',
-       'python',
-       'rbenv_virtualenv::rbenv',
-       'rbenv_virtualenv::virtualenv',
+      'apt::default',
+      'git',
+
+      'python',
+      'rbenv::default',
+      'rbenv::ruby_build',
+      'rbenv::rbenv_vars',
+
+      'rbenv_virtualenv::default'
     ]
 
   end
