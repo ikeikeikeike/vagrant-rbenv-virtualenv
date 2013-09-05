@@ -86,7 +86,7 @@ Vagrant.configure('2') do |config|
       },
       postgresql: {
         password: {
-          postgres: 'mapt2uj8poj8an5lic2'
+          postgres: 'ba5b7e4dc511afc3c8c8a9dc3d459216'
         },
         contrib: {
           extensions: [
