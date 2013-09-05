@@ -1,0 +1,22 @@
+description "Start the Unicorn. Run the Unicorn Workers for Rails Application"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+console owner
+
+env HOME=/home/vagrant
+env RBENV_ROOT="/home/vagrant/.rbenv"
+env PATH="/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+env RAILS_ENV=vagrant
+
+#setuid vagrant
+#setgid vagrant
+
+chdir /home/vagrant/var/current
+
+script
+  exec sudo -u vagrant env PATH=$PATH $HOME/.rbenv/versions/1.9.3-p448/bin/bundle exec unicorn_rails -c config/appserver/vagrant_unicorn.rb -E $RAILS_ENV -p 5000 >> /tmp/upstart.log 2>&1
+end script
+
+respawn limit 10 5

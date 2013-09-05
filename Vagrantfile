@@ -126,6 +126,7 @@ Vagrant.configure('2') do |config|
       'postgresql::contrib',
       'memcached',
       'database',
+      'database::postgresql',
 
       'rbenv_virtualenv::default'
     ]

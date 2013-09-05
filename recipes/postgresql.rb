@@ -6,6 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+include_recipe 'database::postgresql'
 
 postgresql_connection_info = {
   host: "127.0.0.1",
