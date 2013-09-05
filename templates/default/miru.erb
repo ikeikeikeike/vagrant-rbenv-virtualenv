@@ -1,0 +1,97 @@
+  upstream miru_backend {
+    server 127.0.0.1:5000;
+  }
+
+  server {
+    listen 80;
+    server_name miru.vagrant;
+
+    root /home/vagrant/var/current/public;
+
+    access_log <%= node['nginx']['log_dir'] %>/<%= node['hostname'] %>_access.log;
+    error_log <%= node['nginx']['log_dir'] %>/<%= node['hostname'] %>_error.log;
+
+    proxy_connect_timeout 300;
+    proxy_read_timeout    300;
+    proxy_send_timeout    300;
+
+    location /statics/html/support_browser.html {
+        root /home/vagrant/var/current/public;
+    }
+
+    location /stores/show {
+
+      # 静的ファイルは location ~* を見るように
+      if (-f $request_filename) {
+        break;
+      }
+
+      proxy_set_header X-Real-IP  $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+
+      proxy_pass http://miru_backend;
+    }
+
+    # Cache setting: stores/show 以外キャッシュ
+    location /stores {
+
+        # 静的ファイルは location ~* を見るように
+        if (-f $request_filename) {
+            break;
+        }
+
+        # path + querystring を cache
+        proxy_ignore_headers Cache-Control;
+        proxy_cache mirukey;
+        proxy_cache_valid 200 302 60m;
+        proxy_cache_valid 404 10m;
+
+        proxy_set_header X-Real-IP  $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+
+        proxy_pass http://miru_backend;
+    }
+
+    location / {
+
+      # 静的ファイルは location ~* を見るように
+      if (-f $request_filename) {
+        break;
+      }
+
+      # proxy先のstatusも見てカスタムのエラーページを表示
+      proxy_intercept_errors on;
+
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+
+      proxy_pass http://miru_backend;
+    }
+
+    location ~* \.(txt|xml\.gz|pdf|ico|css|js|gif|jpe?g|png)(\?[0-9]+)?$ {
+      # 上記拡張子を1日cache
+      expires 1d;
+    }
+
+    # Sencha touch
+    location /app.json { root /home/vagrant/var/current/public; }
+    location /configure.json { root /home/vagrant/var/current/public; }
+    location /packager.json { root /home/vagrant/var/current/public; }
+
+    # Rails error pages
+    error_page 500 502 503 504 /500.html;
+    error_page 400 401 403 /500.html;
+    error_page 404 /404.html;
+
+    location = /500.html {
+        root /home/vagrant/var/current/public;
+    }
+
+    location = /404.html {
+        root /home/vagrant/var/current/public;
+    }
+
+  }

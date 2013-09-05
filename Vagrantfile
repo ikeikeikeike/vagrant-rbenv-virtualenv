@@ -1,25 +1,25 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
+Vagrant.configure('2') do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  config.vm.hostname = "rbenv-virtualenv-berkshelf"
+  config.vm.hostname = 'rbenv-virtualenv-berkshelf'
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "ubuntu-12.04.3-x64"
+  config.vm.box = 'ubuntu-12.04.3-x64'
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "http://localhost:8000/packer_virtualbox_virtualbox.box"
+  config.vm.box_url = 'http://localhost:8000/packer_virtualbox_virtualbox.box'
 
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :private_network, ip: "33.33.33.10"
+  config.vm.network :private_network, ip: '33.33.33.10'
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -77,25 +77,53 @@ Vagrant.configure("2") do |config|
   config.vm.provision :chef_solo do |chef|
 
     chef.json = {
+      mysql: {
+        server_root_password: '',
+        server_debian_password: '',
+        server_repl_password: ''
+      },
+      postgresql: {
+        password: {
+          postgres: 'mapt2uj8poj8an5lic2'
+        },
+        contrib: {
+          extensions: [
+            'pg_trgm'
+          ]
+        }
+      },
+      nginx: {
+        worker_processes: 4,
+        event: 'epoll',
+        worker_rlimit_nofile: 10000
+      },
       rbenv: {
         ruby_build: {
           upgrade: 'sync'
         }
       },
       python: {
-        install_method: "source",
-        version: "2.7.5",
+        install_method: 'source',
+        version: '2.7.5',
       },
     }
 
     chef.run_list = [
       'apt::default',
+      'nginx',
       'git',
 
       'python',
       'rbenv::default',
       'rbenv::ruby_build',
       'rbenv::rbenv_vars',
+
+      'mysql::client',
+      'mysql::server',
+      'postgresql::server',
+      'postgresql::contrib',
+      'memcached',
+      'database',
 
       'rbenv_virtualenv::default'
     ]
