@@ -19,3 +19,21 @@ end
 package "htop" do
   action :install
 end
+package 'mecab' do
+  action :install
+end
+package 'mecab-naist-jdic-eucjp' do
+  action :install
+end
+package 'mecab-naist-jdic' do
+  action :install
+end
+package 'ruby-mecab' do
+  action :install
+end
+package 'libmecab-dev' do
+  action :install
+end
+package 'libmecab-ruby' do
+  action :install
+end
