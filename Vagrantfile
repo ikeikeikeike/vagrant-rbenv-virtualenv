@@ -99,10 +99,8 @@ Vagrant.configure('2') do |config|
         event: 'epoll',
         worker_rlimit_nofile: 10000
       },
-      rbenv: {
-        ruby_build: {
-          upgrade: 'sync'
-        }
+      ruby_build: {
+        upgrade: "sync"
       },
       python: {
         install_method: 'source',
@@ -116,9 +114,7 @@ Vagrant.configure('2') do |config|
       'git',
 
       'python',
-      'rbenv::default',
-      'rbenv::ruby_build',
-      'rbenv::rbenv_vars',
+      'ruby_build',
 
       'mysql::client',
       'mysql::server',

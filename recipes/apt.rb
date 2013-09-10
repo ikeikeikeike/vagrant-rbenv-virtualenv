@@ -37,3 +37,9 @@ end
 package 'libmecab-ruby' do
   action :install
 end
+package 'redis-server' do
+  action :install
+end
+package 'libhiredis-dev' do
+  action :install
+end
