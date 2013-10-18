@@ -19,40 +19,40 @@
         root /home/vagrant/var/current/public;
     }
 
-    location /stores/show {
+    <%# location /stores/show { %>
 
-      # 静的ファイルは location ~* を見るように
-      if (-f $request_filename) {
-        break;
-      }
+      <%# # 静的ファイルは location ~* を見るように %>
+      <%# if (-f $request_filename) { %>
+        <%# break; %>
+      <%# } %>
 
-      proxy_set_header X-Real-IP  $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header Host $http_host;
+      <%# proxy_set_header X-Real-IP  $remote_addr; %>
+      <%# proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; %>
+      <%# proxy_set_header Host $http_host; %>
 
-      proxy_pass http://miru_backend;
-    }
+      <%# proxy_pass http://miru_backend; %>
+    <%# } %>
 
-    # Cache setting: stores/show 以外キャッシュ
-    location /stores {
+    <%# # Cache setting: stores/show 以外キャッシュ %>
+    <%# location /stores { %>
 
-        # 静的ファイルは location ~* を見るように
-        if (-f $request_filename) {
-            break;
-        }
+        <%# # 静的ファイルは location ~* を見るように %>
+        <%# if (-f $request_filename) { %>
+            <%# break; %>
+        <%# } %>
 
-        # path + querystring を cache
-        proxy_ignore_headers Cache-Control;
-        proxy_cache mirukey;
-        proxy_cache_valid 200 302 60m;
-        proxy_cache_valid 404 10m;
+        <%# # path + querystring を cache %>
+        <%# proxy_ignore_headers Cache-Control; %>
+        <%# proxy_cache mirukey; %>
+        <%# proxy_cache_valid 200 302 60m; %>
+        <%# proxy_cache_valid 404 10m; %>
 
-        proxy_set_header X-Real-IP  $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $http_host;
+        <%# proxy_set_header X-Real-IP  $remote_addr; %>
+        <%# proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; %>
+        <%# proxy_set_header Host $http_host; %>
 
-        proxy_pass http://miru_backend;
-    }
+        <%# proxy_pass http://miru_backend; %>
+    <%# } %>
 
     location / {
 
